@@ -16,23 +16,34 @@
     </swiper>
   </view>
 
-  <!-- 功能入口区域 -->
+  <!-- 商品分类入口区域 -->
   <view class="entry-section">
     <view class="entry-grid">
-      <!-- 积分商城兑换 -->
-      <view class="entry-item" bindtap="goPointsMall">
-        <view class="entry-icon points-mall">
-          <van-icon name="points" size="40" color="#ff6b35" />
+      <!-- 动态显示商品分类 -->
+      <view 
+        class="entry-item" 
+        wx:for="{{categories}}" 
+        wx:key="id"
+        bindtap="onCategoryClick"
+        data-id="{{item.id}}"
+        data-name="{{item.name}}"
+      >
+        <view class="entry-icon category-icon">
+          <image 
+            src="{{item.icon || '/images/default.png'}}" 
+            class="category-image"
+            mode="aspectFill"
+          />
         </view>
-        <text class="entry-title">积分商城兑换</text>
+        <text class="entry-title">{{item.name}}</text>
       </view>
       
-      <!-- 兑换联盟 -->
-      <view class="entry-item" bindtap="goExchangeAlliance">
-        <view class="entry-icon exchange-alliance">
-          <van-icon name="exchange" size="40" color="#4CAF50" />
+      <!-- 如果分类少于2个，显示默认入口 -->
+      <view class="entry-item" wx:if="{{categories.length < 2}}" bindtap="goAllCategories">
+        <view class="entry-icon all-categories">
+          <van-icon name="apps-o" size="40" color="#666" />
         </view>
-        <text class="entry-title">兑换联盟</text>
+        <text class="entry-title">全部分类</text>
       </view>
     </view>
   </view>
@@ -44,9 +55,18 @@
         <van-icon name="diamond-o" size="20" color="#e64340" />
         <text>会员充值</text>
       </view>
+      <view class="refresh-btn" bindtap="refreshMembershipPackages" wx:if="{{!loading}}">
+        <van-icon name="replay" size="16" color="#999" />
+      </view>
     </view>
     
-    <view class="membership-grid">
+    <!-- 加载状态 -->
+    <view class="loading-container" wx:if="{{loading}}">
+      <van-loading size="24" color="#e64340">加载中...</van-loading>
+    </view>
+    
+    <!-- 商品列表 -->
+    <view class="membership-grid" wx:elif="{{membershipPackages.length > 0}}">
       <view 
         class="package-item" 
         wx:for="{{membershipPackages}}" 
@@ -54,29 +74,55 @@
         bindtap="onPackageClick"
         data-package="{{item}}"
       >
-        <view class="package-header">
-          <view class="package-title">{{item.title}}</view>
-          <view class="package-validity">{{item.validity}}</view>
-        </view>
-        
-        <view class="package-prices">
-          <view class="current-price">¥{{item.price}}</view>
-          <view class="original-price">¥{{item.originalPrice}}</view>
-        </view>
-        
-        <view class="package-description">{{item.description}}</view>
-        
-        <view class="package-button">
-          <van-button 
-            type="primary" 
-            size="small" 
-            round
-            custom-style="background: linear-gradient(135deg, #e64340 0%, #ff8a80 100%); border: none;"
-          >
-            立即充值
-          </van-button>
+        <!-- 商品信息 -->
+        <view class="package-info">
+          <view class="package-header">
+            <view class="package-title">{{item.title}}</view>
+            <view class="package-tags" wx:if="{{item.tags}}">
+              <text class="tag">{{item.tags}}</text>
+            </view>
+          </view>
+          
+          <view class="package-description" wx:if="{{item.description}}">
+            {{item.description}}
+          </view>
+          
+          <view class="package-details">
+            <view class="detail-item" wx:if="{{item.validity}}">
+              <text class="detail-label">特色：</text>
+              <text class="detail-value">{{item.validity}}</text>
+            </view>
+            <view class="detail-item" wx:if="{{item.unit}}">
+              <text class="detail-label">单位：</text>
+              <text class="detail-value">{{item.unit}}</text>
+            </view>
+            <view class="detail-item" wx:if="{{item.numberSells > 0}}">
+              <text class="detail-label">已售：</text>
+              <text class="detail-value">{{item.numberSells}}</text>
+            </view>
+          </view>
+          
+          <view class="package-prices">
+            <view class="current-price">¥{{item.price}}</view>
+          </view>
+          
+          <view class="package-button">
+            <van-button 
+              type="primary" 
+              size="small" 
+              round
+              custom-style="background: linear-gradient(135deg, #e64340 0%, #ff8a80 100%); border: none;"
+            >
+              立即购买
+            </van-button>
+          </view>
         </view>
       </view>
+    </view>
+    
+    <!-- 空状态 -->
+    <view class="empty-container" wx:else>
+      <van-empty description="暂无充值商品" />
     </view>
   </view>
 

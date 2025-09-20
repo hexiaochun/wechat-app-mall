@@ -10,7 +10,7 @@
 }
 
 .game-swiper {
-  height: 400rpx;
+  height: 459rpx;
   width: 100%;
 }
 
@@ -59,12 +59,23 @@
   box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.1);
 }
 
-.entry-icon.points-mall {
-  background: linear-gradient(135deg, #ff6b35 0%, #ffa726 100%);
+.entry-icon.category-icon {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 16rpx;
+  background: #fff;
+  border: 2rpx solid #f0f0f0;
+  overflow: hidden;
 }
 
-.entry-icon.exchange-alliance {
-  background: linear-gradient(135deg, #4CAF50 0%, #81C784 100%);
+.category-image {
+  width: 100%;
+  height: 100%;
+  border-radius: 12rpx;
+}
+
+.entry-icon.all-categories {
+  background: linear-gradient(135deg, #666 0%, #999 100%);
 }
 
 .entry-title {
@@ -86,6 +97,9 @@
 .section-header {
   padding: 30rpx 30rpx 20rpx;
   border-bottom: 1rpx solid #f0f0f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .section-title {
@@ -100,6 +114,28 @@
   margin-left: 12rpx;
 }
 
+.refresh-btn {
+  padding: 8rpx;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.refresh-btn:active {
+  background: #f0f0f0;
+  transform: rotate(180deg);
+}
+
+/* 加载状态 */
+.loading-container {
+  padding: 60rpx;
+  text-align: center;
+}
+
+/* 空状态 */
+.empty-container {
+  padding: 60rpx;
+}
+
 /* 套餐网格 */
 .membership-grid {
   display: grid;
@@ -112,11 +148,14 @@
   background: linear-gradient(135deg, #fff 0%, #fafafa 100%);
   border: 2rpx solid #f0f0f0;
   border-radius: 12rpx;
-  padding: 30rpx 20rpx;
-  text-align: center;
+  padding: 20rpx;
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  min-height: 280rpx;
 }
 
 .package-item:active {
@@ -135,63 +174,118 @@
   background: linear-gradient(90deg, #e64340 0%, #ff8a80 100%);
 }
 
+/* 商品信息 */
+.package-info {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: 1;
+}
+
 .package-header {
-  margin-bottom: 20rpx;
+  margin-bottom: 12rpx;
 }
 
 .package-title {
-  font-size: 30rpx;
+  font-size: 28rpx;
   font-weight: 600;
   color: #333;
   margin-bottom: 8rpx;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-align: center;
 }
 
-.package-validity {
-  font-size: 22rpx;
+.package-tags {
+  margin-top: 8rpx;
+  text-align: center;
+}
+
+.tag {
+  font-size: 20rpx;
   color: #e64340;
   background: #fff5f5;
-  padding: 4rpx 12rpx;
-  border-radius: 12rpx;
+  padding: 4rpx 8rpx;
+  border-radius: 8rpx;
   display: inline-block;
+}
+
+.package-description {
+  font-size: 22rpx;
+  color: #666;
+  margin-bottom: 12rpx;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-align: center;
+}
+
+/* 商品详情 */
+.package-details {
+  margin-bottom: 12rpx;
+}
+
+.detail-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 4rpx;
+  font-size: 20rpx;
+}
+
+.detail-label {
+  color: #999;
+  margin-right: 6rpx;
+}
+
+.detail-value {
+  color: #666;
 }
 
 .package-prices {
   margin-bottom: 20rpx;
+  text-align: center;
 }
 
 .current-price {
-  font-size: 36rpx;
+  font-size: 32rpx;
   font-weight: 700;
   color: #e64340;
-  margin-bottom: 4rpx;
-}
-
-.original-price {
-  font-size: 24rpx;
-  color: #999;
-  text-decoration: line-through;
-}
-
-.package-description {
-  font-size: 24rpx;
-  color: #666;
-  margin-bottom: 25rpx;
 }
 
 .package-button {
   margin-top: auto;
+  text-align: center;
 }
 
 /* 响应式调整 */
 @media (max-width: 750rpx) {
   .membership-grid {
-    grid-template-columns: repeat(2, 1fr);
     gap: 15rpx;
     padding: 20rpx;
   }
   
   .package-item {
-    padding: 25rpx 15rpx;
+    padding: 15rpx;
+    min-height: 260rpx;
+  }
+  
+  .package-title {
+    font-size: 26rpx;
+  }
+  
+  .current-price {
+    font-size: 30rpx;
+  }
+  
+  .detail-item {
+    font-size: 18rpx;
   }
 }
 

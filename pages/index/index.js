@@ -7,56 +7,9 @@ const APP = getApp()
 Page({
   data: {
     banners: [], // 轮播图数据
-    membershipPackages: [ // 会员充值套餐数据
-      {
-        id: 1,
-        title: '套餐一',
-        price: '49.8',
-        originalPrice: '100',
-        validity: '5折',
-        description: '100积分'
-      },
-      {
-        id: 2,
-        title: '套餐二',
-        price: '89.9',
-        originalPrice: '200',
-        validity: '5折',
-        description: '200积分'
-      },
-      {
-        id: 3,
-        title: '套餐三',
-        price: '129.8',
-        originalPrice: '300',
-        validity: '5折',
-        description: '300积分'
-      },
-      {
-        id: 4,
-        title: '套餐四',
-        price: '169.8',
-        originalPrice: '400',
-        validity: '5折',
-        description: '400积分'
-      },
-      {
-        id: 5,
-        title: '套餐五',
-        price: '209.8',
-        originalPrice: '500',
-        validity: '5折',
-        description: '500积分'
-      },
-      {
-        id: 6,
-        title: '套餐六',
-        price: '266.8',
-        originalPrice: '600',
-        validity: '5折',
-        description: '600积分'
-      }
-    ]
+    categories: [], // 商品分类数据
+    membershipPackages: [], // 会员充值商品数据（从接口获取）
+    loading: false // 加载状态
   },
 
   onLoad: function(e) {
@@ -85,6 +38,8 @@ Page({
       }
     })
     this.initBanners()
+    this.initCategories()
+    this.initMembershipPackages()
     // 读取系统参数
     this.readConfigVal()
     getApp().configLoadOK = () => {
@@ -197,56 +152,109 @@ Page({
     }
   },
 
-  // 积分商城兑换入口
-  goPointsMall() {
-    wx.showToast({
-      title: '积分商城兑换功能开发中',
-      icon: 'none'
-    })
-    // TODO: 后续跳转到积分商城页面
-    // wx.navigateTo({
-    //   url: '/pages/points-mall/index'
-    // })
+  // 初始化商品分类
+  async initCategories() {
+    try {
+      const res = await WXAPI.goodsCategory()
+      if (res.code == 0) {
+        // 只取前两个一级分类
+        const firstCategories = res.data.filter(ele => ele.level == 1).slice(0, 2)
+        this.setData({
+          categories: firstCategories
+        })
+      }
+    } catch (error) {
+      console.error('获取商品分类失败:', error)
+    }
   },
 
-  // 兑换联盟入口
-  goExchangeAlliance() {
-    wx.showToast({
-      title: '兑换联盟功能开发中',
-      icon: 'none'
-    })
-    // TODO: 后续跳转到兑换联盟页面
-    // wx.navigateTo({
-    //   url: '/pages/exchange-alliance/index'
-    // })
+  // 初始化会员充值商品
+  async initMembershipPackages() {
+    try {
+      this.setData({ loading: true })
+      
+      const res = await WXAPI.goodsv2({
+        categoryId: 546803, // 会员充值分类ID
+        page: 1,
+        pageSize: 20
+      })
+      
+      if (res.code == 0 && res.data && res.data.result) {
+        // 转换数据格式以适配现有布局
+        const packages = res.data.result.map(item => ({
+          id: item.id,
+          title: item.name,
+          price: item.originalPrice.toFixed(2),
+          originalPrice: item.originalPrice.toFixed(2),
+          validity: item.characteristic || '游戏充值',
+          description: item.subName || item.purchaseNotes || item.characteristic,
+          pic: item.pic,
+          stores: item.stores,
+          unit: item.unit,
+          tags: item.tags,
+          minPrice: item.minPrice,
+          numberSells: item.numberSells || 0,
+          rawData: item // 保存原始数据用于后续处理
+        }))
+        
+        this.setData({
+          membershipPackages: packages
+        })
+      } else {
+        console.error('获取会员充值商品失败:', res.msg)
+        wx.showToast({
+          title: res.msg || '获取商品失败',
+          icon: 'none'
+        })
+      }
+    } catch (error) {
+      console.error('获取会员充值商品异常:', error)
+      wx.showToast({
+        title: '网络异常，请稍后重试',
+        icon: 'none'
+      })
+    } finally {
+      this.setData({ loading: false })
+    }
   },
 
-  // 会员充值套餐点击
+  // 分类点击事件
+  onCategoryClick(e) {
+    const categoryId = e.currentTarget.dataset.id
+    const categoryName = e.currentTarget.dataset.name
+    
+    // 跳转到分类页面
+    wx.setStorageSync('_categoryId', categoryId)
+    wx.switchTab({
+      url: '/pages/category/category'
+    })
+  },
+
+  // 全部分类点击事件
+  goAllCategories() {
+    wx.switchTab({
+      url: '/pages/category/category'
+    })
+  },
+
+  // 会员充值商品点击
   onPackageClick(e) {
     const packageInfo = e.currentTarget.dataset.package
-    wx.showModal({
-      title: '充值确认',
-      content: `确定购买${packageInfo.title}吗？价格：¥${packageInfo.price}`,
-      success: (res) => {
-        if (res.confirm) {
-          this.handleRecharge(packageInfo)
-        }
-      }
+    
+    // 跳转到商品详情页
+    wx.navigateTo({
+      url: `/pages/goods-details/index?id=${packageInfo.id}`
     })
   },
 
-  // 处理充值逻辑
-  handleRecharge(packageInfo) {
-    wx.showToast({
-      title: '充值功能开发中',
-      icon: 'none'
-    })
-    // TODO: 后续实现充值逻辑
-    console.log('充值套餐:', packageInfo)
+  // 刷新会员充值商品
+  refreshMembershipPackages() {
+    this.initMembershipPackages()
   },
 
   onPullDownRefresh: function() {
     this.initBanners()
+    this.initMembershipPackages()
     wx.stopPullDownRefresh()
   },
 

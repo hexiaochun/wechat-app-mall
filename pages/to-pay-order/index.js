@@ -239,6 +239,10 @@ Page({
   async createOrder(e) {
     // shopCarType: 0 //0自营购物车，1云货架购物车
     const loginToken = wx.getStorageSync('token') // 用户登录 token
+    
+    // 检查商品分类，判断是否需要自动发货
+    const shouldAutoDeliver = await this.checkAutoDeliverByCategory()
+    
     const postData = {
       token: loginToken,
       goodsJsonStr: this.data.goodsJsonStr,
@@ -246,6 +250,11 @@ Page({
       peisongType: this.data.peisongType,
       goodsType: this.data.shopCarType,
       cardId: this.data.cardId,
+    }
+    
+    // 只有分类ID为546803的商品才添加autoDeliver:true
+    if (shouldAutoDeliver) {
+      postData.autoDeliver = true
     }
     if (this.data.deductionScore != '-1') {
       postData.deductionScore = this.data.deductionScore
@@ -779,6 +788,33 @@ Page({
       goodsJsonStr: JSON.stringify(goodsJsonStr)
     });
     this.createOrder();
+  },
+
+  // 检查商品分类，判断是否需要自动发货
+  async checkAutoDeliverByCategory() {
+    const goodsList = this.data.goodsList
+    if (!goodsList || goodsList.length === 0) {
+      return false
+    }
+
+    // 遍历所有商品，检查是否有分类ID为546803的商品
+    for (let i = 0; i < goodsList.length; i++) {
+      const goods = goodsList[i]
+      try {
+        // 通过商品ID获取商品详情
+        const res = await WXAPI.goodsDetail(goods.goodsId || goods.id)
+        if (res.code === 0 && res.data && res.data.basicInfo) {
+          // 检查商品的分类ID
+          if (res.data.basicInfo.categoryId === 546803 || res.data.basicInfo.categoryId === '546803') {
+            return true // 找到目标分类的商品，需要自动发货
+          }
+        }
+      } catch (error) {
+        console.error('获取商品详情失败:', error)
+      }
+    }
+    
+    return false // 没有找到目标分类的商品
   },
   addAddress: function () {
     wx.navigateTo({
