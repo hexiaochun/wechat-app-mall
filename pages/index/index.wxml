@@ -87,23 +87,14 @@
             {{item.description}}
           </view>
           
-          <view class="package-details">
-            <view class="detail-item" wx:if="{{item.validity}}">
-              <text class="detail-label">特色：</text>
-              <text class="detail-value">{{item.validity}}</text>
-            </view>
-            <view class="detail-item" wx:if="{{item.unit}}">
-              <text class="detail-label">单位：</text>
-              <text class="detail-value">{{item.unit}}</text>
-            </view>
-            <view class="detail-item" wx:if="{{item.numberSells > 0}}">
-              <text class="detail-label">已售：</text>
-              <text class="detail-value">{{item.numberSells}}</text>
-            </view>
-          </view>
-          
           <view class="package-prices">
             <view class="current-price">¥{{item.price}}</view>
+            <view class="original-price" wx:if="{{item.originalPrice && item.originalPrice != item.price}}">
+              原价：¥{{item.originalPrice}}
+            </view>
+            <view class="discount" wx:if="{{item.discount}}">
+              {{item.discount}}
+            </view>
           </view>
           
           <view class="package-button">

@@ -181,21 +181,31 @@ Page({
       
       if (res.code == 0 && res.data && res.data.result) {
         // 转换数据格式以适配现有布局
-        const packages = res.data.result.map(item => ({
-          id: item.id,
-          title: item.name,
-          price: item.originalPrice.toFixed(2),
-          originalPrice: item.originalPrice.toFixed(2),
-          validity: item.characteristic || '游戏充值',
-          description: item.subName || item.purchaseNotes || item.characteristic,
-          pic: item.pic,
-          stores: item.stores,
-          unit: item.unit,
-          tags: item.tags,
-          minPrice: item.minPrice,
-          numberSells: item.numberSells || 0,
-          rawData: item // 保存原始数据用于后续处理
-        }))
+        const packages = res.data.result.map(item => {
+          // 计算折扣信息
+          let discount = ''
+          let currentPrice = item.originalPrice
+          let originalPrice = item.originalPrice
+          
+          // 如果有折扣价格，使用折扣价格作为当前价格
+          if (item.discountPrice && item.discountPrice > 0 && item.discountPrice < item.originalPrice) {
+            currentPrice = item.discountPrice
+            const discountRate = ((originalPrice - currentPrice) / originalPrice * 100).toFixed(0)
+            discount = `${discountRate}折`
+          }
+          
+          return {
+            id: item.id,
+            title: item.name,
+            price: currentPrice.toFixed(2),
+            originalPrice: originalPrice.toFixed(2),
+            discount: discount,
+            description: item.subName || item.purchaseNotes || item.characteristic,
+            pic: item.pic,
+            tags: item.tags,
+            rawData: item // 保存原始数据用于后续处理
+          }
+        })
         
         this.setData({
           membershipPackages: packages

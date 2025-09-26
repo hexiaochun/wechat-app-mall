@@ -226,37 +226,35 @@
   text-align: center;
 }
 
-/* 商品详情 */
-.package-details {
-  margin-bottom: 12rpx;
-}
-
-.detail-item {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 4rpx;
-  font-size: 20rpx;
-}
-
-.detail-label {
-  color: #999;
-  margin-right: 6rpx;
-}
-
-.detail-value {
-  color: #666;
-}
 
 .package-prices {
   margin-bottom: 20rpx;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6rpx;
 }
 
 .current-price {
   font-size: 32rpx;
   font-weight: 700;
   color: #e64340;
+}
+
+.original-price {
+  font-size: 22rpx;
+  color: #999;
+  text-decoration: line-through;
+}
+
+.discount {
+  font-size: 20rpx;
+  color: #fff;
+  background: #e64340;
+  padding: 4rpx 8rpx;
+  border-radius: 8rpx;
+  display: inline-block;
 }
 
 .package-button {
@@ -284,9 +282,6 @@
     font-size: 30rpx;
   }
   
-  .detail-item {
-    font-size: 18rpx;
-  }
 }
 
 /* 动画效果 */
