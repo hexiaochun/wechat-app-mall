@@ -4,7 +4,11 @@ Page({
   data: {
     banners:[],
     swiperMaxNumber: 0,
-    swiperCurrent: 0
+    swiperCurrent: 0,
+    countdown: 0,
+    autoTimer: null,
+    countdownTimer: null,
+    hasInitialized: false  // 防止重复初始化
   },
   onLoad(e){
     // e.shopId = 6040 // 测试，测试完了注释掉
@@ -18,7 +22,58 @@ Page({
   onShow:function(){
     
   },
+  
+  onUnload: function() {
+    // 页面卸载时清理定时器
+    this.clearTimers();
+  },
+  
+  onHide: function() {
+    // 页面隐藏时清理定时器
+    this.clearTimers();
+  },
+  
+  // 启动倒计时
+  startCountdown: function() {
+    // 清理已存在的倒计时，防止重复
+    this.clearTimers();
+    
+    this.setData({
+      countdown: 3
+    });
+    
+    // 倒计时更新
+    this.data.countdownTimer = setInterval(() => {
+      let countdown = this.data.countdown - 1;
+      
+      if (countdown <= 0) {
+        this.clearTimers();
+        this.goToIndex();
+      } else {
+        this.setData({
+          countdown: countdown
+        });
+      }
+    }, 1000);
+  },
+  
+  // 清理所有定时器
+  clearTimers: function() {
+    if (this.data.countdownTimer) {
+      clearInterval(this.data.countdownTimer);
+      this.data.countdownTimer = null;
+    }
+    if (this.data.autoTimer) {
+      clearTimeout(this.data.autoTimer);
+      this.data.autoTimer = null;
+    }
+  },
   async readConfigVal() {
+    // 防止重复初始化
+    if (this.data.hasInitialized) {
+      return
+    }
+    
     const mallName = wx.getStorageSync('mallName')
     if (!mallName) {
       return
@@ -30,8 +85,11 @@ Page({
     if (!shopMod) {
       shopMod = 0
     }
-    const app_show_pic_version = wx.getStorageSync('app_show_pic_version')
-    if (app_show_pic_version && app_show_pic_version == CONFIG.version) {
+    // 每次都展示启动页
+    const res = await WXAPI.banners({
+      type: 'app'
+    })
+    if (res.code == 700) {
       if (shopMod==1) {
         this.goShopSelectPage()
       } else {
@@ -40,24 +98,14 @@ Page({
         })
       }
     } else {
-      // 展示启动页
-      const res = await WXAPI.banners({
-        type: 'app'
-      })
-      if (res.code == 700) {
-        if (shopMod==1) {
-          this.goShopSelectPage()
-        } else {
-          wx.switchTab({
-            url: '/pages/index/index',
-          })
-        }
-      } else {
-        this.setData({
-          banners: res.data,
-          swiperMaxNumber: res.data.length
-        });
-      }
+      this.setData({
+        banners: res.data,
+        swiperMaxNumber: res.data.length,
+        hasInitialized: true  // 标记已初始化
+      });
+      
+      // 启动倒计时
+      this.startCountdown();
     }
   },
   swiperchange: function (e) {
@@ -89,15 +137,14 @@ Page({
     }
   },
   goToIndex: function (e) {
+    // 清理倒计时
+    this.clearTimers();
+    
     let shopMod = wx.getStorageSync('shopMod')
     if (!shopMod) {
       shopMod = 0
     }
     if (getApp().globalData.isConnected) {
-      wx.setStorage({
-        key: 'app_show_pic_version',
-        data: CONFIG.version
-      })
       if (shopMod == 1) {
         this.goShopSelectPage()
       } else {

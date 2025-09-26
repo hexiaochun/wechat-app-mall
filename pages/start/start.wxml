@@ -10,5 +10,8 @@
   <image src="/images/start-right.png" mode="widthFix"></image>
 </view>
 <view class="jump-btn-box">
-  <view class="jump-btn" bind:tap="goToIndex">进入小程序</view>
+  <view class="jump-btn" bind:tap="goToIndex">
+    <text wx:if="{{countdown > 0}}">{{countdown}}秒后自动进入</text>
+    <text wx:else>进入小程序</text>
+  </view>
 </view>
