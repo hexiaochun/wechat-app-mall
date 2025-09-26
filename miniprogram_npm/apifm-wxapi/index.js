@@ -1285,11 +1285,15 @@ module.exports = {
   refundApplySetBackLogistics: (data) => {
     return request('/order/refundApply/setBackLogistics', true, 'post', data)
   },
-  cmsCategories: function cmsCategories() {
-    return request('/cms/category/list', true, 'get', {});
+  cmsCategories: function cmsCategories(data) {
+    return request('/cms/category/list', true, 'get', data || {});
   },
-  cmsCategoryDetail: function cmsCategoryDetail(id) {
-    return request('/cms/category/info', true, 'get', { id: id });
+  cmsCategoryDetail: function cmsCategoryDetail(data) {
+    // 兼容性处理：如果传入的是字符串，则认为是id参数
+    if (typeof data === 'string' || typeof data === 'number') {
+      data = { id: data };
+    }
+    return request('/cms/category/info', true, 'get', data || {});
   },
   cmsArticles: function cmsArticles(data) {
     return request('/cms/news/list', true, 'post', data);

@@ -9,6 +9,22 @@
   border-bottom: 1rpx solid #eaeaea;
   padding-bottom: 32rpx;
 }
+
+/* 公告时间样式 */
+.notice-time {
+  display: flex;
+  align-items: center;
+  margin-top: 20rpx;
+  padding-bottom: 32rpx;
+  border-bottom: 1rpx solid #eaeaea;
+}
+
+.time-text {
+  font-size: 24rpx;
+  color: #999;
+  margin-left: 8rpx;
+}
+
 .text {
   margin-top: 32rpx;
   line-height: 64rpx;

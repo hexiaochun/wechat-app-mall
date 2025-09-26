@@ -1,4 +1,5 @@
 const WXAPI = require('apifm-wxapi')
+const CMS = require('../../utils/cms')
 Page({
   data: {
     categoryId: undefined, // 分类id
@@ -12,7 +13,13 @@ Page({
 
   },
   async cmsCategoryDetail() {
-    const res = await WXAPI.cmsCategoryDetail(this.data.categoryId)
+    // 使用工具函数构建参数，支持预约统计和用户预约数据
+    const params = CMS.buildCmsCategoryDetailParams(this.data.categoryId, {
+      includeYuyueStatistics: true, // 获取预约报名数量统计
+      includeUserYuyue: true        // 获取用户预约数据
+    })
+    
+    const res = await WXAPI.cmsCategoryDetail(params)
     if (res.code == 0) {
       this.setData({
         category: res.data
@@ -26,9 +33,10 @@ Page({
     wx.showLoading({
       title: '',
     })
-    const res = await WXAPI.cmsArticlesV3({
+    const params = CMS.buildCmsArticlesParams({
       categoryId: this.data.categoryId || ''
     })
+    const res = await WXAPI.cmsArticlesV3(params)
     wx.hideLoading()
     if (res.code == 0) {
       this.setData({

@@ -14,13 +14,27 @@ Page({
       }
     })
   },
+  /**
+   * 分享给朋友
+   */
   onShareAppMessage() {
-  },
-  onShareTimeline() {    
+    const notice = this.data.notice
     return {
-      title: this.data.notice.title,
-      query: 'id=' + this.data.notice.id,
-      imageUrl: wx.getStorageSync('share_pic')
+      title: notice ? notice.title : '活动公告',
+      path: '/pages/notice/show?id=' + (notice ? notice.id : ''),
+      imageUrl: notice && notice.pic ? notice.pic : wx.getStorageSync('share_pic')
+    }
+  },
+  
+  /**
+   * 分享到朋友圈
+   */
+  onShareTimeline() {    
+    const notice = this.data.notice
+    return {
+      title: notice ? notice.title : '活动公告',
+      query: 'id=' + (notice ? notice.id : ''),
+      imageUrl: notice && notice.pic ? notice.pic : wx.getStorageSync('share_pic')
     }
   },
   subscribe() {

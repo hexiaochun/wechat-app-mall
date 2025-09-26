@@ -10,7 +10,22 @@ Page({
 
   },
   async category() {
-    const res = await WXAPI.cmsCategories()
+    // 准备请求参数
+    const params = {}
+    
+    // 如果用户已登录，添加token参数
+    const token = wx.getStorageSync('token')
+    if (token) {
+      params.token = token
+    }
+    
+    // 如果有shopId配置，添加shopId参数
+    const shopInfo = wx.getStorageSync('shopInfo')
+    if (shopInfo && shopInfo.id) {
+      params.shopId = shopInfo.id
+    }
+    
+    const res = await WXAPI.cmsCategories(params)
     if (res.code == 0) {
       const category = res.data.filter(ele => {
         return ele.type == 'qa'

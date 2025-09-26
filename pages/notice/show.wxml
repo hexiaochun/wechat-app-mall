@@ -1,6 +1,12 @@
 <view class="notice">
   <view class="title">{{notice.title}}</view>
-  <van-cell title="订阅最新公告、活动提醒，不错过最新优惠信息~" is-link bind:click="subscribe" />
+  
+  <!-- 公告时间 -->
+  <view class="notice-time" wx:if="{{notice.dateAdd}}">
+    <van-icon name="clock-o" size="14px" color="#999" />
+    <text class="time-text">{{notice.dateAdd}}</text>
+  </view>
+  
   <view class="text">
     <mp-html content="{{notice.content}}" />
   </view>

@@ -1,0 +1,44 @@
+<view class="activity-container">
+  <!-- 公告列表 -->
+  <view class="notice-list" wx:if="{{noticeList.length > 0}}">
+    <view class="notice-item" wx:for="{{noticeList}}" wx:key="id" bindtap="viewNoticeDetail" data-item="{{item}}">
+      <!-- Banner图片 -->
+      <view class="notice-banner" wx:if="{{item.pic}}">
+        <image src="{{item.pic}}" mode="aspectFill" class="banner-image" />
+      </view>
+      
+      <!-- 公告信息 -->
+      <view class="notice-info">
+        <!-- 公告标题 -->
+        <view class="notice-title">{{item.title}}</view>
+        
+        <!-- 公告描述 -->
+        <view class="notice-description" wx:if="{{item.descript}}">
+          {{item.descript}}
+        </view>
+        
+        <!-- 公告时间 -->
+        <view class="notice-time" wx:if="{{item.dateAdd}}">
+          <van-icon name="clock-o" size="12px" color="#999" />
+          <text class="time-text">{{item.dateAdd}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 加载状态 -->
+  <view class="loading-state" wx:if="{{loading}}">
+    <van-loading type="spinner" size="24px" />
+    <text class="loading-text">加载中...</text>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{noticeList.length === 0 && !loading}}">
+    <van-empty description="暂无公告" />
+  </view>
+
+  <!-- 没有更多数据提示 -->
+  <view class="no-more-tip" wx:if="{{!hasMore && noticeList.length > 0}}">
+    <van-divider contentPosition="center">没有更多了</van-divider>
+  </view>
+</view>

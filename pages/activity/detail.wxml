@@ -1,0 +1,33 @@
+<view class="activity-detail-container" wx:if="{{!loading}}">
+  <view class="activity-detail" wx:if="{{activityDetail}}">
+    <!-- 活动标题 -->
+    <view class="activity-header">
+      <view class="activity-title">{{activityDetail.title}}</view>
+      <view class="activity-time" wx:if="{{activityDetail.dateAdd}}">
+        <van-icon name="clock-o" size="14px" color="#999" />
+        <text class="time-text">{{activityDetail.dateAdd}}</text>
+      </view>
+    </view>
+
+    <!-- 活动图片 -->
+    <view class="activity-image" wx:if="{{activityDetail.pic}}">
+      <image src="{{activityDetail.pic}}" mode="widthFix" />
+    </view>
+
+    <!-- 活动内容 -->
+    <view class="activity-content">
+      <mp-html content="{{activityDetail.content}}" />
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{!activityDetail}}">
+    <van-empty description="活动不存在或已删除" />
+  </view>
+</view>
+
+<!-- 加载状态 -->
+<view class="loading-container" wx:if="{{loading}}">
+  <van-loading type="spinner" size="24px" />
+  <text class="loading-text">加载中...</text>
+</view>
