@@ -182,23 +182,24 @@ Page({
       if (res.code == 0 && res.data && res.data.result) {
         // 转换数据格式以适配现有布局
         const packages = res.data.result.map(item => {
+          console.log('商品数据:', item) // 调试输出，查看实际字段
+          
           // 计算折扣信息
           let discount = ''
-          let currentPrice = item.originalPrice
+          let minPrice = item.minPrice || item.discountPrice || item.originalPrice
           let originalPrice = item.originalPrice
           
-          // 如果有折扣价格，使用折扣价格作为当前价格
-          if (item.discountPrice && item.discountPrice > 0 && item.discountPrice < item.originalPrice) {
-            currentPrice = item.discountPrice
-            const discountRate = ((originalPrice - currentPrice) / originalPrice * 100).toFixed(0)
+          // 如果有会员价格且比原价低，计算折扣
+          if (minPrice && originalPrice && minPrice < originalPrice) {
+            const discountRate = ((originalPrice - minPrice) / originalPrice * 100).toFixed(0)
             discount = `${discountRate}折`
           }
           
           return {
             id: item.id,
             title: item.name,
-            price: currentPrice.toFixed(2),
-            originalPrice: originalPrice.toFixed(2),
+            minPrice: minPrice ? minPrice.toFixed(2) : '0.00',
+            originalPrice: originalPrice ? originalPrice.toFixed(2) : null,
             discount: discount,
             description: item.subName || item.purchaseNotes || item.characteristic,
             pic: item.pic,

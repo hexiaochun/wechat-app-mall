@@ -41,7 +41,7 @@
       <!-- 如果分类少于2个，显示默认入口 -->
       <view class="entry-item" wx:if="{{categories.length < 2}}" bindtap="goAllCategories">
         <view class="entry-icon all-categories">
-          <van-icon name="apps-o" size="40" color="#666" />
+          <van-icon name="apps-o" size="80" color="#fff" />
         </view>
         <text class="entry-title">全部分类</text>
       </view>
@@ -74,39 +74,38 @@
         bindtap="onPackageClick"
         data-package="{{item}}"
       >
-        <!-- 商品信息 -->
-        <view class="package-info">
-          <view class="package-header">
-            <view class="package-title">{{item.title}}</view>
-            <view class="package-tags" wx:if="{{item.tags}}">
-              <text class="tag">{{item.tags}}</text>
-            </view>
-          </view>
-          
+        <!-- 左侧商品信息 -->
+        <view class="package-left">
+          <view class="package-title">{{item.title}}</view>
           <view class="package-description" wx:if="{{item.description}}">
             {{item.description}}
           </view>
-          
-          <view class="package-prices">
-            <view class="current-price">¥{{item.price}}</view>
-            <view class="original-price" wx:if="{{item.originalPrice && item.originalPrice != item.price}}">
-              原价：¥{{item.originalPrice}}
-            </view>
-            <view class="discount" wx:if="{{item.discount}}">
-              {{item.discount}}
-            </view>
+          <view class="package-tags" wx:if="{{item.tags}}">
+            <text class="tag">{{item.tags}}</text>
+          </view>
+        </view>
+        
+        <!-- 中间价格 -->
+        <view class="package-center">
+          <view class="price-container">
+            <view class="member-price-label">¥{{item.minPrice}}</view>
+          </view>
+          <view class="original-price" wx:if="{{item.originalPrice && item.originalPrice != item.minPrice}}">
+           ¥{{item.originalPrice}}
           </view>
           
-          <view class="package-button">
-            <van-button 
-              type="primary" 
-              size="small" 
-              round
-              custom-style="background: linear-gradient(135deg, #e64340 0%, #ff8a80 100%); border: none;"
-            >
-              立即购买
-            </van-button>
-          </view>
+        </view>
+        
+        <!-- 右侧按钮 -->
+        <view class="package-right">
+          <van-button 
+            type="primary" 
+            size="small" 
+            round
+            custom-style="background: linear-gradient(135deg, #e64340 0%, #ff8a80 100%); border: none;"
+          >
+            立即购买
+          </van-button>
         </view>
       </view>
     </view>
