@@ -183,7 +183,15 @@ Page({
   },
   changeCarNumber(e) {
     const key = e.currentTarget.dataset.key
-    const num = e.detail.value
+    const num = parseInt(e.detail.value)
+    
+    // 验证输入值
+    if (!num || num < 1) {
+      // 如果输入无效，重新加载购物车信息以恢复原值
+      this.shippingCarInfo()
+      return
+    }
+    
     const token = wx.getStorageSync('token')
     if(this.data.shopCarType == 0){
     WXAPI.shippingCarInfoModifyNumber(token, key, num).then(res => {

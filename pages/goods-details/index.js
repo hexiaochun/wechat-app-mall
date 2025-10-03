@@ -752,9 +752,15 @@ Page({
     return buyNowInfo;
   },
   onShareAppMessage() {
+    // 使用轮播图第一张作为分享图片
+    const shareImage = this.data.goodsDetail.pics && this.data.goodsDetail.pics[0] 
+      ? this.data.goodsDetail.pics[0].pic 
+      : this.data.goodsDetail.basicInfo.pic
+    
     let _data = {
       title: this.data.goodsDetail.basicInfo.name,
       path: '/pages/goods-details/index?id=' + this.data.goodsDetail.basicInfo.id + '&inviter_id=' + wx.getStorageSync('uid'),
+      imageUrl: shareImage,
       success: function (res) {
         // 转发成功
       },
@@ -769,6 +775,11 @@ Page({
     return _data
   },
   onShareTimeline() {
+    // 使用轮播图第一张作为分享图片
+    const shareImage = this.data.goodsDetail.pics && this.data.goodsDetail.pics[0] 
+      ? this.data.goodsDetail.pics[0].pic 
+      : this.data.goodsDetail.basicInfo.pic
+    
     let title = this.data.goodsDetail.basicInfo.name
     let query = 'id=' + this.data.goodsDetail.basicInfo.id + '&inviter_id=' + wx.getStorageSync('uid')
     if (this.data.kjJoinUid) {
@@ -778,7 +789,7 @@ Page({
     return {
       title,
       query,
-      imageUrl: this.data.goodsDetail.basicInfo.pic
+      imageUrl: shareImage
     }
   },
   reputation: function (goodsId) {
