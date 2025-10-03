@@ -48,12 +48,70 @@
     </view>
   </view>
 
+  <!-- 充值规则板块 -->
+  <view class="recharge-rules-section" wx:if="{{rechargeSendRules && rechargeSendRules.length > 0}}">
+    <view class="section-header">
+      <view class="section-title">
+        <van-icon name="balance-o" size="20" color="#ff9800" />
+        <text>会员充值</text>
+      </view>
+    </view>
+    
+    <view class="recharge-rules-grid">
+      <view 
+        class="recharge-rule-item" 
+        wx:for="{{rechargeSendRules}}" 
+        wx:key="id"
+        bindtap="goRecharge"
+        data-confine="{{item.confine}}"
+        data-send="{{item.send}}"
+      >
+        <!-- 左侧充值金额 -->
+        <view class="rule-left">
+          <view class="rule-label">充值金额</view>
+          <view class="rule-amount">¥{{item.confine}}</view>
+        </view>
+        
+        <!-- 中间赠送信息 -->
+        <view class="rule-center">
+          <view class="rule-arrow" wx:if="{{item.send && item.send > 0}}">
+            <view class="arrow-icon">+</view>
+          </view>
+          <view class="rule-send-big" wx:if="{{item.send && item.send > 0}}">
+            <view class="send-label">额外赠送</view>
+            <view class="send-amount">¥{{item.send}}</view>
+          </view>
+          <view class="no-gift" wx:else>
+            <view class="arrow-icon">→</view>
+          </view>
+        </view>
+        
+        <!-- 右侧等号 -->
+        <view class="equal-sign">
+          <view class="equal-icon">=</view>
+        </view>
+        
+        <!-- 右侧总金额 -->
+        <view class="rule-right">
+          <view class="total-section" wx:if="{{item.send && item.send > 0}}">
+            <view class="total-label">实际到账</view>
+            <view class="total-amount">¥{{item.confine + item.send}}</view>
+          </view>
+          <view class="total-section" wx:else>
+            <view class="total-label">实际到账</view>
+            <view class="total-amount">¥{{item.confine}}</view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
   <!-- 会员充值板块 -->
   <view class="membership-section">
     <view class="section-header">
       <view class="section-title">
         <van-icon name="diamond-o" size="20" color="#e64340" />
-        <text>会员充值</text>
+        <text>弹珠购买</text>
       </view>
       <view class="refresh-btn" bindtap="refreshMembershipPackages" wx:if="{{!loading}}">
         <van-icon name="replay" size="16" color="#999" />
@@ -120,3 +178,21 @@
 
 <!-- 弹出编辑昵称和头像的框 -->
 <login show="{{ nickPopShow }}" avatarUrl="{{ popavatarUrl }}" name="{{ popnick }}" />
+
+<!-- 绑定手机号弹窗 -->
+<bind-mobile
+  title="绑定手机号码"
+  alarmText="为保障您的资金安全，请先绑定手机号码"
+  show="{{ bindMobileShow }}"
+  bind:cancel="bindMobileCancel"
+  bind:ok="bindMobileOk"
+/>
+
+<!-- 支付弹窗 -->
+<payment
+  money="{{ amount }}"
+  remark="在线充值{{ amount }}"
+  show="{{ paymentShow }}"
+  bind:cancel="paymentCancel"
+  bind:ok="paymentOk"
+/>

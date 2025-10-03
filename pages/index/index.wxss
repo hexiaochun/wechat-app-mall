@@ -87,6 +87,276 @@
   line-height: 1.2;
 }
 
+/* 充值规则区域 */
+.recharge-rules-section {
+  background: #fff;
+  margin: 0 20rpx 20rpx;
+  border-radius: 16rpx;
+  box-shadow: 0 2rpx 20rpx rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.recharge-rules-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+  padding: 30rpx;
+}
+
+.recharge-rule-item {
+  background: linear-gradient(135deg, #fff 0%, #fafafa 100%);
+  border: 2rpx solid #f0f0f0;
+  border-radius: 16rpx;
+  padding: 24rpx 20rpx;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  height: auto;
+  min-height: 120rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.08);
+}
+
+.recharge-rule-item:active {
+  transform: translateY(-2rpx);
+  box-shadow: 0 8rpx 30rpx rgba(255, 107, 0, 0.2);
+  border-color: #FF6B00;
+  background: linear-gradient(135deg, #fefefe 0%, #f8f8f8 100%);
+}
+
+.recharge-rule-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4rpx;
+  background: linear-gradient(90deg, #FF6B00 0%, #FF8C00 100%);
+}
+
+/* 左侧充值金额 */
+.rule-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 110rpx;
+  margin-right: 10rpx;
+  background: linear-gradient(135deg, #F5F7FA 0%, #EEF2F7 100%);
+  padding: 16rpx 12rpx;
+  border-radius: 10rpx;
+  border: 2rpx solid #E1E8ED;
+}
+
+.rule-label {
+  font-size: 20rpx;
+  color: #8B96A5;
+  margin-bottom: 6rpx;
+  line-height: 1;
+  font-weight: 500;
+}
+
+.rule-amount {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #4A90E2;
+  line-height: 1;
+}
+
+/* 中间赠送区域 */
+.rule-center {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-right: 8rpx;
+  gap: 8rpx;
+}
+
+.rule-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44rpx;
+  height: 44rpx;
+  background: linear-gradient(135deg, #FF6B00 0%, #FF8C00 100%);
+  border-radius: 50%;
+  box-shadow: 0 3rpx 10rpx rgba(255, 107, 0, 0.3);
+  border: 2rpx solid rgba(255, 255, 255, 0.5);
+  flex-shrink: 0;
+}
+
+.arrow-icon {
+  font-size: 28rpx;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1;
+  text-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.2);
+}
+
+.rule-send-big {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #FF6B00 0%, #FF8C00 100%);
+  padding: 14rpx 16rpx;
+  border-radius: 10rpx;
+  box-shadow: 0 4rpx 12rpx rgba(255, 107, 0, 0.4);
+  min-width: 90rpx;
+  border: 2rpx solid rgba(255, 255, 255, 0.3);
+  flex-shrink: 0;
+}
+
+.send-label {
+  font-size: 18rpx;
+  color: #fff;
+  margin-bottom: 6rpx;
+  line-height: 1;
+  font-weight: 600;
+  letter-spacing: 0.5rpx;
+}
+
+.send-amount {
+  font-size: 32rpx;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1;
+  text-shadow: 0 2rpx 6rpx rgba(0, 0, 0, 0.2);
+}
+
+.no-gift {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44rpx;
+  height: 44rpx;
+  background: linear-gradient(135deg, #8B96A5 0%, #6B7785 100%);
+  border-radius: 50%;
+  box-shadow: 0 3rpx 10rpx rgba(139, 150, 165, 0.3);
+  border: 2rpx solid rgba(255, 255, 255, 0.5);
+  flex-shrink: 0;
+}
+
+/* 等号 */
+.equal-sign {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 8rpx;
+  flex-shrink: 0;
+}
+
+.equal-icon {
+  font-size: 32rpx;
+  font-weight: 800;
+  color: #8B96A5;
+  line-height: 1;
+}
+
+/* 右侧总金额区域 */
+.rule-right {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 110rpx;
+  background: linear-gradient(135deg, #FFF9F0 0%, #FFF3E0 100%);
+  padding: 16rpx 12rpx;
+  border-radius: 10rpx;
+  border: 2rpx solid #FFE0B2;
+  flex-shrink: 0;
+}
+
+.total-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6rpx;
+}
+
+.total-label {
+  font-size: 20rpx;
+  color: #8B6914;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.total-amount {
+  font-size: 36rpx;
+  font-weight: 800;
+  color: #FF6B00;
+  line-height: 1;
+  text-shadow: 0 2rpx 4rpx rgba(255, 107, 0, 0.15);
+}
+
+/* 响应式调整 - 充值规则 */
+@media (max-width: 750rpx) {
+  .recharge-rules-grid {
+    gap: 15rpx;
+    padding: 20rpx;
+  }
+  
+  .recharge-rule-item {
+    padding: 20rpx 16rpx;
+    min-height: 110rpx;
+  }
+  
+  .rule-amount {
+    font-size: 32rpx;
+  }
+  
+  .send-amount {
+    font-size: 28rpx;
+  }
+  
+  .total-amount {
+    font-size: 32rpx;
+  }
+  
+  .rule-left {
+    min-width: 95rpx;
+    margin-right: 8rpx;
+    padding: 14rpx 10rpx;
+  }
+  
+  .rule-center {
+    margin-right: 6rpx;
+    gap: 6rpx;
+  }
+  
+  .rule-arrow {
+    width: 40rpx;
+    height: 40rpx;
+  }
+  
+  .arrow-icon {
+    font-size: 24rpx;
+  }
+  
+  .rule-send-big {
+    min-width: 80rpx;
+    padding: 12rpx 14rpx;
+  }
+  
+  .equal-sign {
+    margin-right: 6rpx;
+  }
+  
+  .equal-icon {
+    font-size: 28rpx;
+  }
+  
+  .rule-right {
+    min-width: 95rpx;
+    padding: 14rpx 10rpx;
+  }
+}
+
 /* 会员充值区域 */
 .membership-section {
   background: #fff;

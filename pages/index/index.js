@@ -9,7 +9,11 @@ Page({
     banners: [], // 轮播图数据
     categories: [], // 商品分类数据
     membershipPackages: [], // 会员充值商品数据（从接口获取）
-    loading: false // 加载状态
+    rechargeSendRules: [], // 充值规则数据
+    loading: false, // 加载状态
+    paymentShow: false, // 支付弹窗显示状态
+    bindMobileShow: false, // 绑定手机号弹窗显示状态
+    amount: 0 // 充值金额
   },
 
   onLoad: function(e) {
@@ -39,6 +43,7 @@ Page({
     })
     this.initBanners()
     this.initCategories()
+    this.initRechargeSendRules()
     this.initMembershipPackages()
     // 读取系统参数
     this.readConfigVal()
@@ -48,6 +53,11 @@ Page({
   },
 
   readConfigVal() {
+    const needBindMobile = wx.getStorageSync('needBindMobile')
+    this.setData({
+      needBindMobile: needBindMobile,
+    })
+    // 原有的逻辑
     const mallName = wx.getStorageSync('mallName')
     if (!mallName) {
       return
@@ -168,6 +178,85 @@ Page({
     }
   },
 
+  // 初始化充值规则
+  async initRechargeSendRules() {
+    try {
+      const res = await WXAPI.rechargeSendRules()
+      if (res.code == 0) {
+        this.setData({
+          rechargeSendRules: res.data
+        })
+      }
+    } catch (error) {
+      console.error('获取充值规则失败:', error)
+    }
+  },
+
+  // 点击充值规则，直接拉起充值
+  async goRecharge(e) {
+    const confine = e.currentTarget.dataset.confine
+    const amount = confine
+    
+    // 判断是否需要绑定手机号码
+    if (this.data.needBindMobile == 1) {
+      const token = wx.getStorageSync('token')
+      if (!token) {
+        wx.showToast({
+          title: '请先登录',
+          icon: 'none'
+        })
+        return
+      }
+      
+      const resUserDetail = await WXAPI.userDetail(token)
+      if (resUserDetail.code == 0 && !resUserDetail.data.base.mobile) {
+        this.setData({
+          amount,
+          bindMobileShow: true
+        })
+        return
+      }
+    }
+    
+    this.setData({
+      amount,
+      paymentShow: true
+    })
+  },
+
+  // 绑定手机号完成
+  bindMobileOk(e) {
+    this.setData({
+      bindMobileShow: false,
+      paymentShow: true
+    })
+  },
+
+  // 取消绑定手机号
+  bindMobileCancel() {
+    this.setData({
+      bindMobileShow: false
+    })
+  },
+
+  // 支付完成
+  paymentOk(e) {
+    this.setData({
+      paymentShow: false
+    })
+    wx.showToast({
+      title: '充值成功',
+      icon: 'success'
+    })
+  },
+
+  // 取消支付
+  paymentCancel() {
+    this.setData({
+      paymentShow: false
+    })
+  },
+
   // 初始化会员充值商品
   async initMembershipPackages() {
     try {
@@ -265,6 +354,7 @@ Page({
 
   onPullDownRefresh: function() {
     this.initBanners()
+    this.initRechargeSendRules()
     this.initMembershipPackages()
     wx.stopPullDownRefresh()
   },
