@@ -21,6 +21,7 @@ Page({
     propertyChildNames: "",
     canSubmit: false, //  选中规格尺寸时候是否允许加入购物车
     shopType: "addShopCar", //购物类型，加入购物车或立即购买，默认为加入购物车
+    currentImageIndex: 0, // 当前显示的图片索引
   },
   bindscroll(e) {
     if (this.data.tabclicked) {
@@ -1123,6 +1124,21 @@ Page({
       fail: err => {
         console.error(err)
       }
+    })
+  },
+  
+  // 小图片点击事件
+  onThumbnailTap(e) {
+    const index = e.currentTarget.dataset.index
+    this.setData({
+      currentImageIndex: index
+    })
+  },
+  
+  // 轮播图切换事件
+  onSwiperChange(e) {
+    this.setData({
+      currentImageIndex: e.detail.current
     })
   },
 })

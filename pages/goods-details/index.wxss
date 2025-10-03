@@ -686,3 +686,34 @@ swiper-item image {
   border-radius: 50%;
   flex-shrink: 0;
 }
+
+/* 小图片预览样式 */
+.thumbnail-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20rpx 30rpx;
+  background-color: #fff;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.thumbnail-item {
+  display: inline-block;
+  margin-right: 20rpx;
+  border: 2rpx solid transparent;
+  border-radius: 8rpx;
+  overflow: hidden;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.thumbnail-item.active {
+  border-color: #e64340;
+}
+
+.thumbnail-image {
+  width: 80rpx;
+  height: 80rpx;
+  display: block;
+}

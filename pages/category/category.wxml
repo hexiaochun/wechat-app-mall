@@ -1,12 +1,23 @@
 <van-search value="{{ name }}" placeholder="请输入搜索关键词" shape="round" bind:search="bindconfirm" use-right-icon-slot>
   <van-icon slot="right-icon" name="scan" bind:click="searchscan" />
 </van-search>
+
+<!-- 顶部分类横向展示 -->
+<scroll-view class="category-horizontal" scroll-x="true" scroll-with-animation="true">
+  <view class="category-row">
+    <view 
+      class="category-item {{ activeCategory == index ? 'category-item-active' : '' }}" 
+      wx:for="{{firstCategories}}" 
+      wx:key="id" 
+      data-idx="{{index}}" 
+      bindtap="onCategoryClick"
+    >
+      {{ item.name }}
+    </view>
+  </view>
+</scroll-view>
+
 <view class="main">
-  <scroll-view class="category-container" scroll-y="true" scroll-with-animation="true" scroll-into-view="{{ aaa }}">
-    <van-sidebar custom-class="sidebar-l" active-key="{{ activeCategory }}">
-      <van-sidebar-item wx:if="{{item.level == 1}}" id="category{{item.id}}" wx:for="{{firstCategories}}" wx:key="id" data-idx="{{index}}" bindtap="onCategoryClick" title="{{ item.name }}" />
-    </van-sidebar>
-  </scroll-view>
   <scroll-view class="goods-container" scroll-y="true" scroll-top="{{scrolltop}}" wx:if='{{onLoadStatus}}' bindscrolltolower="goodsGoBottom">
     <van-tabs wx:if="{{ categoryMod != 2 && categorySelected.childs && categorySelected.childs.length > 0 }}" custom-class="llargada" bind:change="onSecondCategoryClick" ellipsis="{{ false }}">
       <van-tab title="全部"></van-tab>
@@ -72,8 +83,7 @@
       thumb-link="{{ goodsDetailPage.url(item) }}"
     >
       <view wx:if="{{ item.supplyType != 'vop_jd' }}" class="goods-btn" slot="footer">
-        <van-icon wx:if="{{ item.propertyIds || item.hasAddition }}" name="add" color="#e64340" size="48rpx" data-id="{{item.id}}" bind:click="addShopCar" />
-        <van-icon wx:else name="shopping-cart-o" color="#e64340" size="48rpx" data-id="{{item.id}}" bind:click="addShopCar" />
+        <van-icon name="shopping-cart-o" color="#e64340" size="48rpx" data-id="{{item.id}}" bind:click="addShopCar" />
       </view>
     </van-card>
   </scroll-view>
