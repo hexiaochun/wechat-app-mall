@@ -180,7 +180,7 @@ page,view,image,input {
   display: flex;
   flex-direction: column;
   text-align: center;
-  font-size: 24rpx;
+  font-size: 32rpx;
   line-height: 20px;
   color:#666;
 }

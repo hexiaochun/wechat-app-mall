@@ -127,15 +127,15 @@
     "list": [
       {
         "pagePath": "pages/index/index",
-        "iconPath": "images/nav/game-off.png",
-        "selectedIconPath": "images/nav/game-on.png",
+        "iconPath": "images/nav/home-off.png",
+        "selectedIconPath": "images/nav/home-on.png",
         "text": "首页"
       },
       {
         "pagePath": "pages/category/category",
         "iconPath": "images/nav/fl-off.png",
         "selectedIconPath": "images/nav/fl-on.png",
-        "text": "分类"
+        "text": "商城"
       },
       {
         "pagePath": "pages/activity/index",

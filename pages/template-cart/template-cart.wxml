@@ -21,15 +21,12 @@
             </view>
             <view class="text-box">
               <view class="goods-title" bind:tap="goDetail" data-item="{{ item }}">{{item.name}}</view>
-              <view wx:show="{{item.sku}}" class="goods-label">
-                <block wx:for="{{item.sku}}" wx:for-item="option" wx:key="index">
-                  {{option.optionName}}:{{option.optionValueName}}
-                </block>
-                <block wx:for="{{item.additions}}" wx:for-item="option" wx:key="index">
-                  {{option.pname}}:{{option.name}}
-                </block>
+              <view wx:if="{{item.subName}}" class="goods-sub-name">{{item.subName}}</view>
+              <view class="goods-price">
+                <block wx:if="{{item.price == 0 && item.score > 0}}">{{item.score}} 积分</block>
+                <block wx:elif="{{item.score == 0 || !item.score}}">¥ {{item.price}}</block>
+                <block wx:else>¥ {{item.price}} + {{item.score}} 积分</block>
               </view>
-              <view class="goods-price">¥ {{item.price}}</view>
               <view class="buy-num">
                 <view class="jian-btn" catchtap="jianBtnTap" data-index="{{index}}">-</view>
                 <input type="number" value="{{item.number}}" data-key="{{item.key}}" bindinput="changeCarNumber" />
@@ -62,15 +59,12 @@
           </view>
           <view class="text-box">
             <view class="goods-title">{{item.name}}</view>
-            <view wx:show="{{item.sku}}" class="goods-label">
-              <block wx:for="{{item.sku}}" wx:for-item="option" wx:key="index">
-                {{option.optionName}}:{{option.optionValueName}}
-              </block>
-              <block wx:for="{{item.additions}}" wx:for-item="option" wx:key="index">
-                {{option.pname}}:{{option.name}}
-              </block>
+            <view wx:if="{{item.subName}}" class="goods-sub-name">{{item.subName}}</view>
+            <view class="goods-price">
+              <block wx:if="{{item.price == 0 && item.score > 0}}">{{item.score}} 积分</block>
+              <block wx:elif="{{item.score == 0 || !item.score}}">¥ {{item.price}}</block>
+              <block wx:else>¥ {{item.price}} + {{item.score}} 积分</block>
             </view>
-            <view class="goods-price">¥ {{item.price}}</view>
             <view class="buy-num">
               <view class="jian-btn" catchtap="jianBtnTap" data-index="{{index}}">-</view>
               <input type="number" value="{{item.number}}" data-key="{{item.key}}" bindinput="changeCarNumber" />

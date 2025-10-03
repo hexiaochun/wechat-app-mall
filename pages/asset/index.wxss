@@ -1,38 +1,68 @@
 
 .asset {
   display: flex;
-  padding-top:50rpx;
-  height: 150rpx;
+  padding-top: 50rpx;
+  padding-bottom: 20rpx;
+  height: 180rpx;
   background-color: #e85654;
+  justify-content: space-around;
+  align-items: center;
 }
 .asset .item {
   display: flex;
   flex-direction: column;
-  width:250rpx;
+  flex: 1;
   text-align: center;
-  font-size: 14px;
-  line-height: 30px;
-  color:#fff;
+  color: #fff;
+  gap: 10rpx;
+}
+.asset .item view:first-child {
+  font-size: 28rpx;
+  opacity: 0.9;
+}
+.asset .item view:last-child {
+  font-size: 48rpx;
+  font-weight: bold;
+  letter-spacing: 2rpx;
 }
 
 .btn-view {
-  height: 88rpx;
   background-color: #e85654;
-  padding-right:40rpx;
-  padding-bottom:30rpx;  
+  padding: 0 40rpx 40rpx 40rpx;
   width: 100vw;
   display: flex;
-  flex-direction: row-reverse;
+  justify-content: center;
+  gap: 30rpx;
+  box-sizing: border-box;
+}
+.btn-view form {
+  flex: 1;
+  max-width: 300rpx;
 }
 .btn-view .btn {
-  border-color: #fff !important;
-  color:#fff !important;
-  margin-right:20rpx;  
+  width: 100%;
+  height: 80rpx;
+  line-height: 80rpx;
+  background-color: rgba(255, 255, 255, 0.95);
+  border: none;
+  border-radius: 40rpx;
+  font-size: 32rpx;
+  font-weight: 500;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.1);
+}
+.btn-view .btn-recharge {
+  color: #e85654;
+}
+.btn-view .btn-withdraw {
+  color: #ff9800;
+}
+.btn-view .btn::after {
+  border: none;
 }
 
 .btn-hover {
-  border-color: #fff;
-  color:#fff;
+  opacity: 0.85;
+  transform: scale(0.98);
 }
 
 .no-data {

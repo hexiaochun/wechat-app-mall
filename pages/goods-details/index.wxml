@@ -63,12 +63,6 @@
         </view>
       </view>
       <view class="goods-title">{{goodsDetail.basicInfo.name}}</view>
-      <view wx:if="{{ goodsDetail.basicInfo.purchaseNotes }}" class="goods-des-info">
-        <view class="label-title"> 
-          <view class="left">购买须知</view>
-        </view>
-        <view class="characteristic"><text>{{ goodsDetail.basicInfo.purchaseNotes }}</text></view>
-      </view>
       <view wx:if="{{ goodsDetail.basicInfo.characteristic }}" class="goods-des-info">
         <view class="label-title"> 
           <view class="left">商品特色</view>
@@ -188,6 +182,12 @@
       <view class="goods-text">
         <mp-html content="{{goodsDetail.content}}" />
       </view>
+    </view>
+    <view wx:if="{{ goodsDetail.basicInfo.purchaseNotes }}" class="goods-des-info" style="margin-top:0;">
+      <view class="label-title"> 
+        <view class="left">购买须知</view>
+      </view>
+      <view class="characteristic"><text>{{ goodsDetail.basicInfo.purchaseNotes }}</text></view>
     </view>
     <van-cell-group id="reputation" wx:if="{{!curGoodsKanjia && reputation}}" custom-class="vw100 reputation-cell-group">
       <view class="label-title"> 

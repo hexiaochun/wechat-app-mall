@@ -8,18 +8,16 @@ Page({
    */
   data: {
     balance: 0.00,
-    freeze: 0,
     score: 0,
     score_sign_continuous: 0,
     cashlogs: undefined,
 
-    tabs: ["资金明细", "提现记录", "押金记录"],
+    tabs: ["资金明细", "提现记录"],
     activeIndex: 0,
     sliderOffset: 0,
     sliderLeft: 0,
 
     withDrawlogs: undefined,
-    depositlogs: undefined,
 
     rechargeOpen: false, // 是否开启充值[预存]功能
   },
@@ -32,11 +30,11 @@ Page({
     if (withdrawal == '1') {
       this.setData({
         withdrawal,
-        tabs: ["资金明细", "提现记录", "押金记录"]
+        tabs: ["资金明细", "提现记录"]
       })
     } else {
       this.setData({
-        tabs: ["资金明细", "押金记录"]
+        tabs: ["资金明细"]
       })
     }
     AUTH.checkHasLogined().then(isLogined => {
@@ -65,7 +63,6 @@ Page({
       if (res.code == 0) {
         _this.setData({
           balance: res.data.balance.toFixed(2),
-          freeze: res.data.freeze.toFixed(2),
           totleConsumed: res.data.totleConsumed.toFixed(2),
           score: res.data.score
         });
@@ -79,9 +76,6 @@ Page({
     }
     if (activeIndex == 1) {
       this.withDrawlogs()
-    }
-    if (activeIndex == 2) {
-      this.depositlogs()
     }
   },
   cashLogs() {
@@ -114,20 +108,6 @@ Page({
       }
     })
   },
-  depositlogs() {
-    const _this = this
-    WXAPI.depositList({
-      token: wx.getStorageSync('token'),
-      page:1,
-      pageSize:50
-    }).then(res => {
-      if (res.code == 0) {
-        _this.setData({
-          depositlogs: res.data.result
-        })
-      }
-    })
-  },
 
   recharge: function (e) {
     wx.navigateTo({
@@ -137,11 +117,6 @@ Page({
   withdraw: function (e) {
     wx.navigateTo({
       url: "/pages/withdraw/index"
-    })
-  },
-  payDeposit: function (e) {
-    wx.navigateTo({
-      url: "/pages/deposit/pay"
     })
   },
   tabClick: function (e) {
