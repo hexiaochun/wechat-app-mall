@@ -69,20 +69,46 @@
         } else {
           return '/pages/goods-details/index?id=' + item.id
         }
+      },
+      splitTags: function(tags) {
+        if (!tags) return []
+        return tags.split(',')
       }
     }
     </wxs>
     <van-card
       wx:for="{{currentGoods}}" wx:key="id"
-      price="{{item.minPrice}}"
-      desc="{{item.numberSells ? '已售' + item.numberSells : ''}}"
       tag="{{item.gotScore ? (item.gotScore + (item.gotScoreType ? '%' : '') + '积分') : ''}}"
       title="{{item.name}}"
       title-class="title-class-apifm"
       thumb="{{item.pic}}"
       thumb-link="{{ goodsDetailPage.url(item) }}"
+      data-url="{{ goodsDetailPage.url(item) }}"
+      bind:tap="goGoodsDetail"
     >
-      <view wx:if="{{ item.supplyType != 'vop_jd' }}" class="goods-btn" slot="footer">
+      <view slot="desc">
+        <view wx:if="{{item.subName}}" class="goods-subname">{{item.subName}}</view>
+        <view wx:if="{{item.numberSells}}" class="goods-sells">已售{{item.numberSells}}</view>
+        <view wx:if="{{item.tags}}" class="goods-tags">
+          <text wx:for="{{goodsDetailPage.splitTags(item.tags)}}" wx:key="index" wx:for-item="tag" class="goods-tag">{{tag}}</text>
+        </view>
+      </view>
+      <view slot="price">
+        <block wx:if="{{item.minScore > 0 && item.minPrice > 0}}">
+          <text class="goods-price">¥{{item.minPrice}}</text>
+          <text class="goods-price-split"> + </text>
+          <text class="goods-score-number">{{item.minScore}}</text>
+          <text class="goods-score-text">积分</text>
+        </block>
+        <block wx:elif="{{item.minScore > 0 && item.minPrice <= 0}}">
+          <text class="goods-score-number">{{item.minScore}}</text>
+          <text class="goods-score-text">积分</text>
+        </block>
+        <block wx:else>
+          <text class="goods-price">¥{{item.minPrice}}</text>
+        </block>
+      </view>
+      <view wx:if="{{ item.supplyType != 'vop_jd' }}" class="goods-btn" slot="footer" catchtap="stopPropagation">
         <van-icon name="shopping-cart-o" color="#e64340" size="48rpx" data-id="{{item.id}}" bind:click="addShopCar" />
       </view>
     </van-card>

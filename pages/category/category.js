@@ -119,13 +119,28 @@ Page({
       })
       return
     }
+    // 处理商品数据
+    const goodsList = res.data.result.map(item => {
+      // 确保tags字段存在且为字符串
+      if (item.tags && typeof item.tags !== 'string') {
+        item.tags = String(item.tags)
+      }
+      // 打印第一个商品的完整数据用于调试
+      if (this.data.page == 1 && res.data.result.indexOf(item) === 0) {
+        console.log('商品数据示例:', item)
+        console.log('tags字段:', item.tags)
+        console.log('subName字段:', item.subName)
+      }
+      return item
+    })
+    
     if (this.data.page == 1) {
       this.setData({
-        currentGoods: res.data.result
+        currentGoods: goodsList
       })
     } else {
       this.setData({
-        currentGoods: this.data.currentGoods.concat(res.data.result)
+        currentGoods: this.data.currentGoods.concat(goodsList)
       })
     }
   },
@@ -177,14 +192,15 @@ Page({
   onShareAppMessage() {    
     return {
       title: '"' + wx.getStorageSync('mallName') + '" ' + wx.getStorageSync('share_profile'),
-      path: '/pages/index/index?inviter_id=' + wx.getStorageSync('uid')
+      path: '/pages/index/index?inviter_id=' + wx.getStorageSync('uid'),
+      imageUrl: wx.getStorageSync('share_pic')
     }
   },
   onShareTimeline() {    
     return {
       title: '"' + wx.getStorageSync('mallName') + '" ' + wx.getStorageSync('share_profile'),
       query: '',
-      imageUrl: this.data.goodsDetail.basicInfo.pic
+      imageUrl: wx.getStorageSync('share_pic')
     }
   },
   onShow() {
@@ -286,5 +302,16 @@ Page({
         })
       }
     })
+  },
+  goGoodsDetail(e) {
+    const url = e.currentTarget.dataset.url
+    if (url) {
+      wx.navigateTo({
+        url: url
+      })
+    }
+  },
+  stopPropagation() {
+    // 阻止事件冒泡，让购物车按钮点击不会触发跳转
   }
 })

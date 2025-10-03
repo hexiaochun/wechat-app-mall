@@ -31,7 +31,21 @@
     <view class="goods-info">
       <view class="goods-info-top-container">
         <view class="goods-profile">
-          <view class="p"><text>¥</text> {{selectSizePrice}}</view>
+          <view class="p">
+            <block wx:if="{{totalScoreToPay > 0 && selectSizePrice > 0}}">
+              <text>¥</text>{{selectSizePrice}}
+              <text class="price-split"> + </text>
+              <text class="score-number">{{totalScoreToPay}}</text>
+              <text class="score-text">积分</text>
+            </block>
+            <block wx:elif="{{totalScoreToPay > 0 && selectSizePrice <= 0}}">
+              <text class="score-number">{{totalScoreToPay}}</text>
+              <text class="score-text">积分</text>
+            </block>
+            <block wx:else>
+              <text>¥</text>{{selectSizePrice}}
+            </block>
+          </view>
           <view wx:if="{{goodsDetail.basicInfo.originalPrice && goodsDetail.basicInfo.originalPrice > 0}}"
             class="goods-price" style='color:#aaa;text-decoration:line-through;padding: 15rpx 0rpx 0rpx 15rpx;'>
             <text>¥</text> {{selectSizeOPrice}}</view>
@@ -264,9 +278,25 @@
 
 <van-popup show="{{ !hideShopPopup }}" round closeable position="bottom"
   custom-style="padding-top:48rpx;max-height: 80%;" bind:close="closePopupTap">
-  <van-card centered price="{{ selectSizePrice }}"
+  <van-card centered 
     origin-price="{{ selectSizePrice != selectSizePrice ? selectSizeOPrice : '' }}"
-    title="{{ goodsDetail.basicInfo.name }}" thumb="{{ skuGoodsPic }}" />
+    title="{{ goodsDetail.basicInfo.name }}" thumb="{{ skuGoodsPic }}">
+    <view slot="price" class="popup-price-container">
+      <block wx:if="{{totalScoreToPay > 0 && selectSizePrice > 0}}">
+        <text class="popup-price">¥{{selectSizePrice}}</text>
+        <text class="popup-price-split"> + </text>
+        <text class="popup-score-number">{{totalScoreToPay}}</text>
+        <text class="popup-score-text">积分</text>
+      </block>
+      <block wx:elif="{{totalScoreToPay > 0 && selectSizePrice <= 0}}">
+        <text class="popup-score-number">{{totalScoreToPay}}</text>
+        <text class="popup-score-text">积分</text>
+      </block>
+      <block wx:else>
+        <text class="popup-price">¥{{selectSizePrice}}</text>
+      </block>
+    </view>
+  </van-card>
   <view class="size-label-box">
     <block wx:for="{{goodsDetail.properties}}" wx:for-item="property" wx:for-index="idx" wx:key="id">
       <view class="label">{{property.name}}</view>

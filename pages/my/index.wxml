@@ -1,22 +1,36 @@
-<view wx:if="{{ !apiUserInfoMap }}" class="header-box">
+<view wx:if="{{ !apiUserInfoMap }}" class="user-info-card">
   <view class="login-btn">
     <van-button type="warning" block round bind:click="login">立即登陆</van-button>
   </view>
 </view>
-<view wx:else class="header-box">
-  <view class="header-box-left">
-    <button class="avatar" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
+<view wx:else class="user-info-card">
+  <view class="user-main">
+    <button class="avatar-btn" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
       <image class="avatar-img" src="{{ apiUserInfoMap.base.avatarUrl ? apiUserInfoMap.base.avatarUrl : '/images/default.png' }}" mode="aspectFill"></image>
+      <view class="avatar-edit">
+        <van-icon name="photograph" size="28rpx" color="#fff" />
+      </view>
     </button>
-    <view class="r">
-      <view class="uid" bind:tap="copyUid">用户ID: {{ apiUserInfoMap.base.id }}</view>
-      <view class="nick" bindtap="editNick">{{ apiUserInfoMap.base.nick ? apiUserInfoMap.base.nick : '点击设置昵称' }}</view>
-      <view wx:if="{{ apiUserInfoMap.userLevel }}" class="user-level"><van-icon name="medal-o" />{{ apiUserInfoMap.userLevel.name }}</view>
+    <view class="user-info">
+      <view class="nick-row" bindtap="editNick">
+        <text class="nickname">{{ apiUserInfoMap.base.nick ? apiUserInfoMap.base.nick : '点击设置昵称' }}</text>
+        <van-icon name="edit" size="28rpx" color="#999" />
+      </view>
+      <view class="uid-row" bind:tap="copyUid">
+        <text class="uid-label">ID: {{ apiUserInfoMap.base.id }}</text>
+        <van-icon name="records" size="24rpx" color="#999" />
+      </view>
+      <view wx:if="{{ apiUserInfoMap.userLevel }}" class="user-level-tag">
+        <van-icon name="medal" size="28rpx" color="#ff9800" />
+        <text class="level-name">{{ apiUserInfoMap.userLevel.name }}</text>
+      </view>
     </view>
   </view>
-  <view class="user-code" bindtap="goUserCode">
-    <van-icon name="qr" size="64rpx" />
-    <view class="txt">会员码</view>
+  <view class="user-code-btn" bindtap="goUserCode">
+    <view class="qr-icon">
+      <van-icon name="qr" size="48rpx" />
+    </view>
+    <view class="qr-text">会员码</view>
   </view>
 </view>
 <view class="asset">
@@ -24,17 +38,9 @@
     <view class="amount">{{balance}}</view>
     <view>余额</view>
   </view>
-  <view class='item right' bindtap='goAsset'>
-    <view class="amount">{{freeze}}</view>
-    <view>冻结</view>
-  </view>
   <view class='item right' bindtap='goScore'>
     <view class="amount">{{score}}</view>
     <view>积分</view>
-  </view>
-  <view class='item right' bindtap="gogrowth">
-    <view class="amount">{{growth}}</view>
-    <view>成长值</view>
   </view>
 </view>
 <view class="space van-hairline--bottom"></view>
