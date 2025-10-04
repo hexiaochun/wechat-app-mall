@@ -19,7 +19,7 @@
   <!-- 商品分类入口区域 -->
   <view class="entry-section">
     <view class="entry-grid">
-      <!-- 动态显示商品分类 -->
+      <!-- 动态显示商品分类，但名称固定 -->
       <view 
         class="entry-item" 
         wx:for="{{categories}}" 
@@ -35,7 +35,8 @@
             mode="aspectFill"
           />
         </view>
-        <text class="entry-title">{{item.name}}</text>
+        <!-- 根据索引显示固定名称 -->
+        <text class="entry-title">{{index === 0 ? '积分兑换礼品' : '积分兑换联盟'}}</text>
       </view>
       
       <!-- 如果分类少于2个，显示默认入口 -->
